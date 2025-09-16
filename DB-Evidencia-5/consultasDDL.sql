@@ -23,3 +23,14 @@ CREATE TABLE automatizaciones (
     id_usuario INT,
     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario)
 );
+
+CREATE TABLE acciones (
+    id_accion INT PRIMARY KEY,
+    tipo_accion VARCHAR(50),
+    valor_configurado VARCHAR(50),
+    id_automatizacion INT,
+    id_dispositivo INT,
+    FOREIGN KEY (id_automatizacion) REFERENCES Automatizaciones(id_automatizacion),
+    FOREIGN KEY (id_dispositivo) REFERENCES Dispositivos(id_dispositivo)
+);
+
