@@ -1,21 +1,21 @@
 INSERT INTO usuarios (id_usuario, nombre, email) VALUES
 (1, 'Ana', 'ana.garcia@email.com'),
 (2, 'Luis', 'luis.perez@email.com'),
-(3, 'María', 'maria.lopez@email.com'),
+(3, 'Maria', 'maria.lopez@email.com'),
 (4, 'Carlos', 'carlos.sanchez@email.com'),
-(5, 'Sofía', 'sofia.martinez@email.com');
+(5, 'Sofia', 'sofia.martinez@email.com');
 
 INSERT INTO dispositivos (nombre_dispositivo, tipo_dispositivo, estado_dispositivo, id_usuario) VALUES
-('luz Sala', 'Iluminación', 1, 1),
-('Termostato', 'Climatización', 0, 1),
-('Enchufe Cocina', 'Energía', 1, 2),
+('luz Sala', 'Iluminacion', 1, 1),
+('Termostato', 'Climatizacion', 0, 1),
+('Enchufe Cocina', 'Energia', 1, 2),
 ('Sensor Puerta', 'Seguridad', 0, 2),
-('Cámara Exterior', 'Seguridad', 1, 3),
-('Luz Dormitorio', 'Iluminación', 0, 3),
-('Aire Acondicionado', 'Climatización', 1, 4),
-('Enchufe TV', 'Energía', 0, 4),
+('Camara Exterior', 'Seguridad', 1, 3),
+('Luz Dormitorio', 'Iluminacion', 0, 3),
+('Aire Acondicionado', 'Climatizacion', 1, 4),
+('Enchufe TV', 'Energia', 0, 4),
 ('Detector Humo', 'Seguridad', 1, 5),
-('Luz Jardín', 'Iluminación', 0, 5);
+('Luz Jardin', 'Iluminacion', 0, 5);
 
 INSERT INTO automatizaciones (id_automatizacion, descripcion, condicion, id_usuario) VALUES
 (1, 'Encender luces al anochecer', 'hora = 20:00', 1),
@@ -37,8 +37,8 @@ INSERT INTO acciones (tipo_accion, valor_configurado, id_automatizacion, id_disp
 ('encender', 'Enchufe Cocina', 3, 3),
 ('notificar', 'Sensor Puerta', 4, 4),
 ('apagar', 'Luz Sala', 5, 1),
-('apagar', 'Luz Jardín', 5, 10),
-('encender', 'Cámara Exterior', 6, 5),
+('apagar', 'Luz Jardin', 5, 10),
+('encender', 'Camara Exterior', 6, 5),
 ('encender', 'Aire Acondicionado', 7, 7),
 ('notificar', 'Detector Humo', 8, 9);
 
