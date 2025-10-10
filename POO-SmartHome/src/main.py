@@ -1,6 +1,5 @@
 from usuario import Usuario
 from dispositivo import Dispositivo
-from accion import Accion
 import os
 
 def limpiar():
@@ -16,26 +15,46 @@ usuario_actual = None
 # ========== REGISTRO E INICIO DE SESIÓN ==========
 
 def registrar_usuario():
-    limpiar()
-    print("=== REGISTRO ===")
-    nombre = input("Nombre: ").strip()
-    email = input("Email: ").strip()
-    password = input("Password: ").strip()
+    while True:
+        limpiar()
+        print("=== REGISTRO ===")
+        nombre = input("Nombre: ").strip()
+        
+        if not nombre:
+            print("❌ El nombre no puede estar vacío")
+            pausar()
+            continue
+        
+        email = input("Email: ").strip()
+        # Validar formato de email
+        if not email or "@" not in email or "." not in email.split("@")[-1]:
+            print("❌ Email inválido. Debe contener @ y un dominio válido (ej: usuario@email.com)")
+            pausar()
+            continue
+        
+        password = input("Password (mín 6 caracteres): ").strip()
+        
+        if len(password) < 6:
+            print("❌ La contraseña debe tener al menos 6 caracteres")
+            pausar()
+            continue
     
-    # Primer usuario es admin
-    if len(usuarios) == 0:
-        rol = "admin"
-        print("\n✓ Primer usuario registrado como ADMIN")
-    else:
-        rol = "usuario"
-        print("\n✓ Registrado como usuario estándar")
-    
-    try:
-        usuario = Usuario(nombre, email, password, rol)
-        usuarios.append(usuario)
-        print(f"✓ {nombre} registrado exitosamente")
-    except ValueError as e:
-        print(f"❌ Error: {e}")
+        # Primer usuario es admin
+        if len(usuarios) == 0:
+            rol = "admin"
+            print("\n✓ Primer usuario registrado como ADMIN")
+        else:
+            rol = "user"
+            print("\n✓ Registrado como usuario estándar")
+        
+        try:
+            usuario = Usuario(nombre, email, password, rol)
+            usuarios.append(usuario)
+            print(f"✓ {nombre} registrado exitosamente")
+            break
+        except ValueError as e:
+            print(f"❌ Error: {e}")
+            pausar()
 
 def iniciar_sesion():
     global usuario_actual
