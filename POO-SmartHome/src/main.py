@@ -11,6 +11,7 @@ def pausar():
 # Variables globales
 usuarios = []
 usuario_actual = None
+dispositivos_compartidos = []
 
 # ========== REGISTRO E INICIO DE SESIÓN ==========
 
@@ -82,15 +83,15 @@ def consultar_datos_personales():
     print(f"Nombre: {usuario_actual.get_nombre()}")
     print(f"Email: {usuario_actual.get_email()}")
     print(f"Rol: {usuario_actual.get_rol()}")
-    print(f"Dispositivos: {len(usuario_actual.dispositivos)}")
+    print(f"Dispositivos compartidos: {len(dispositivos_compartidos)}")
 
 def consultar_dispositivos():
     limpiar()
-    print("=== MIS DISPOSITIVOS ===\n")
-    if not usuario_actual.dispositivos:
-        print("No hay dispositivos registrados")
+    print("=== DISPOSITIVOS ===\n")
+    if not dispositivos_compartidos:
+        print("No hay dispositivos en el sistema.")
     else:
-        for i, disp in enumerate(usuario_actual.dispositivos, 1):
+        for i, disp in enumerate(dispositivos_compartidos, 1):
             print(f"{i}. {disp}")
 
 def menu_estandar():
@@ -137,16 +138,17 @@ def gestionar_dispositivos():
             tipo = input("Tipo: ").strip()
             disp = Dispositivo(nombre, tipo)
             usuario_actual.agregar_dispositivo(disp)
+            dispositivos_compartidos.append(disp)
             print(f"\n✓ Dispositivo {nombre} agregado")
             pausar()
             
         elif opcion == "2":
             limpiar()
             print("=== DISPOSITIVOS ===\n")
-            if not usuario_actual.dispositivos:
+            if not dispositivos_compartidos:
                 print("No hay dispositivos")
             else:
-                for i, d in enumerate(usuario_actual.dispositivos, 1):
+                for i, d in enumerate(dispositivos_compartidos, 1):
                     print(f"{i}. {d}")
             pausar()
             
@@ -154,7 +156,7 @@ def gestionar_dispositivos():
             limpiar()
             nombre = input("Nombre a buscar: ").strip()
             encontrado = False
-            for d in usuario_actual.dispositivos:
+            for d in dispositivos_compartidos:
                 if d.get_nombre_dispositivo().lower() == nombre.lower():
                     print(f"\n✓ Encontrado: {d}")
                     encontrado = True
@@ -166,9 +168,11 @@ def gestionar_dispositivos():
         elif opcion == "4":
             limpiar()
             nombre = input("Nombre a eliminar: ").strip()
-            for i, d in enumerate(usuario_actual.dispositivos):
+            for i, d in enumerate(dispositivos_compartidos):
                 if d.get_nombre_dispositivo().lower() == nombre.lower():
-                    usuario_actual.dispositivos.pop(i)
+                    dispositivos_compartidos.pop(i)
+                    if d in usuario_actual.dispositivos:
+                        usuario_actual.dispositivos.remove(d)
                     print(f"\n✓ Dispositivo {nombre} eliminado")
                     pausar()
                     break
