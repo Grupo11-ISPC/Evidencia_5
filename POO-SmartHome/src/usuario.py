@@ -1,12 +1,14 @@
 class Usuario:
-    def __init__(self, nombre, email, password):
+    def __init__(self, nombre, email, password, rol='user'):
         self.nombre = nombre
         self.email = email
         self.password = password
+        self.rol = rol
         self.dispositivos = []
         self.automatizaciones = []
-        if not Usuario.validar_usuario(nombre, email, password):
+        if not Usuario.validar_usuario(nombre, email, password, rol):
             raise ValueError("Datos de usuario inválidos.")
+
     
     def agregar_dispositivo(self, dispositivo):
         self.dispositivos.append(dispositivo)
@@ -15,6 +17,7 @@ class Usuario:
     def agregar_automatizacion(self, automatizacion):
         self.automatizaciones.append(automatizacion)
         return f"Automatización {automatizacion.get_descripcion()} agregada."
+    
     def listar_dispositivos(self):
         return [dispositivo.get_nombre_dispositivo() for dispositivo in self.dispositivos]
     
@@ -46,16 +49,23 @@ class Usuario:
         for dispositivo in self.dispositivos:
             if dispositivo.get_nombre_dispositivo() == dispositivo_nombre:
                 return dispositivo.ejecutar_accion(accion)
-        return "Dispositivo no encontrado."
-    
-    def __str__(self):
-        return f"Usuario: {self.nombre}, Email: {self.email}"
-    
-    def validar_usuario(nombre, email, password):
-        if not nombre or not email or not password:
+        return "Dispositivo no encontrado." 
+
+    @staticmethod #para que no necesite self, osea, para que se valide sin instanciar la clase(crear el objeto)
+    def validar_usuario(nombre, email, password, rol):
+        if not nombre or not email or not password or not rol:
             return False
         if "@" not in email or "." not in email.split("@")[-1]:
             return False
         if len(password) < 6:
             return False
+        if rol not in ['admin', 'user']:
+            return False
         return True
+    
+    def get_rol(self):
+        return self.rol
+    
+    def set_rol(self, rol):
+        self.rol = rol
+    
