@@ -98,8 +98,131 @@ def menu_estandar():
             print("❌ Opción inválida")
             pausar()
 
-#
-#Para hacer el menú de admin...
+# ========== MENÚ ADMIN ==========
+
+def gestionar_dispositivos():
+    while True:
+        limpiar()
+        print("=== GESTIÓN DE DISPOSITIVOS ===")
+        print("\n1. Agregar dispositivo")
+        print("2. Listar dispositivos")
+        print("3. Buscar dispositivo")
+        print("4. Eliminar dispositivo")
+        print("0. Volver")
+        
+        opcion = input("\nOpción: ")
+        
+        if opcion == "1":
+            limpiar()
+            nombre = input("Nombre: ").strip()
+            tipo = input("Tipo: ").strip()
+            disp = Dispositivo(nombre, tipo)
+            usuario_actual.agregar_dispositivo(disp)
+            print(f"\n✓ Dispositivo {nombre} agregado")
+            pausar()
+            
+        elif opcion == "2":
+            limpiar()
+            print("=== DISPOSITIVOS ===\n")
+            if not usuario_actual.dispositivos:
+                print("No hay dispositivos")
+            else:
+                for i, d in enumerate(usuario_actual.dispositivos, 1):
+                    print(f"{i}. {d}")
+            pausar()
+            
+        elif opcion == "3":
+            limpiar()
+            nombre = input("Nombre a buscar: ").strip()
+            encontrado = False
+            for d in usuario_actual.dispositivos:
+                if d.get_nombre_dispositivo().lower() == nombre.lower():
+                    print(f"\n✓ Encontrado: {d}")
+                    encontrado = True
+                    break
+            if not encontrado:
+                print(f"❌ No se encontró '{nombre}'")
+            pausar()
+            
+        elif opcion == "4":
+            limpiar()
+            nombre = input("Nombre a eliminar: ").strip()
+            for i, d in enumerate(usuario_actual.dispositivos):
+                if d.get_nombre_dispositivo().lower() == nombre.lower():
+                    usuario_actual.dispositivos.pop(i)
+                    print(f"\n✓ Dispositivo {nombre} eliminado")
+                    pausar()
+                    break
+            else:
+                print(f"❌ No se encontró '{nombre}'")
+                pausar()
+                
+        elif opcion == "0":
+            break
+        else:
+            print("❌ Opción inválida")
+            pausar()
+
+def cambiar_rol_usuario():
+    limpiar()
+    print("=== CAMBIAR ROL ===\n")
+    
+    if len(usuarios) <= 1:
+        print("No hay otros usuarios")
+        pausar()
+        return
+    
+    for i, u in enumerate(usuarios, 1):
+        print(f"{i}. {u.get_nombre()} - {u.get_email()} ({u.get_rol()})")
+    
+    try:
+        num = int(input("\nNúmero de usuario: ")) - 1
+        if 0 <= num < len(usuarios):
+            seleccionado = usuarios[num]
+            
+            if seleccionado == usuario_actual:
+                print("❌ No podés cambiar tu propio rol")
+            else:
+                print(f"\nUsuario: {seleccionado.get_nombre()}")
+                print("1. Admin")
+                print("2. Usuario")
+                nuevo = input("Nuevo rol: ")
+                
+                if nuevo == "1":
+                    seleccionado.set_rol("admin")
+                    print("✓ Cambiado a admin")
+                elif nuevo == "2":
+                    seleccionado.set_rol("usuario")
+                    print("✓ Cambiado a usuario")
+                else:
+                    print("❌ Opción inválida")
+        else:
+            print("❌ Número inválido")
+    except ValueError:
+        print("❌ Entrada inválida")
+    pausar()
+
+def menu_admin():
+    global usuario_actual
+    while True:
+        limpiar()
+        print(f"=== MENÚ ADMIN - {usuario_actual.get_nombre()} ===")
+        print("\n1. Gestionar dispositivos")
+        print("2. Cambiar rol de usuario")
+        print("0. Cerrar sesión")
+        
+        opcion = input("\nOpción: ")
+        
+        if opcion == "1":
+            gestionar_dispositivos()
+        elif opcion == "2":
+            cambiar_rol_usuario()
+        elif opcion == "0":
+            usuario_actual = None
+            break
+        else:
+            print("❌ Opción inválida")
+            pausar()
 
 
 
