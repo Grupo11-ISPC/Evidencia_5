@@ -2,8 +2,8 @@ from dominio.accion import Accion
 
 def test_creacion_accion():
     accion = Accion("Encender", 5)
-    assert accion.tipo_accion == "Encender"
-    assert accion.valor_configurado == 5
+    assert accion.get_tipo_accion() == "Encender"
+    assert accion.get_valor_configurado() == 5
 
 def test_str():
     accion = Accion("Apagar", 0)
