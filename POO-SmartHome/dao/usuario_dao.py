@@ -6,7 +6,7 @@ class UsuarioDAO(IUsuarioDAO):
     def guardar(self, usuario: Usuario):
         cursor.execute(
             "INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)",
-            (usuario.nombre, usuario.email, usuario.password, usuario.rol)
+            (usuario.get_nombre(), usuario.get_email(), usuario._Usuario__password, usuario.get_rol())
         )
         conn.commit()
         return cursor.lastrowid
@@ -15,7 +15,7 @@ class UsuarioDAO(IUsuarioDAO):
         cursor.execute("SELECT * FROM usuarios WHERE id=?", (id,))
         fila = cursor.fetchone()
         if fila:
-            return Usuario(fila[1], fila[2], fila[3], fila[4])
+            return Usuario(fila[1], fila[2], fila[3], fila[4], id=fila[0])
         return None
 
     def listar(self):
@@ -25,10 +25,10 @@ class UsuarioDAO(IUsuarioDAO):
     def modificar(self, usuario: Usuario):
         cursor.execute(
             "UPDATE usuarios SET nombre=?, email=?, password=?, rol=? WHERE email=?",
-            (usuario.nombre, usuario.email, usuario.password, usuario.rol, usuario.email)
+            (usuario.get_nombre(), usuario.get_email(), usuario._Usuario__password, usuario.get_rol(), usuario.get_email())
         )
         conn.commit()
 
     def eliminar(self, usuario: Usuario):
-        cursor.execute("DELETE FROM usuarios WHERE email=?", (usuario.email,))
+        cursor.execute("DELETE FROM usuarios WHERE email=?", (usuario.get_email(),))
         conn.commit()
