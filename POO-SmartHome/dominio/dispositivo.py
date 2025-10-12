@@ -9,28 +9,28 @@ class Dispositivo:
 
     #Acciones
     def ejecutar_accion(self, accion):
-        if accion.tipo_accion == "encender":
+        if accion.get_tipo_accion() == "encender":
             self.encender()
             return f"El dispositivo {self.__nombre_dispositivo} ha sido encendido."
         
-        elif accion.tipo_accion == "apagar":
+        elif accion.get_tipo_accion() == "apagar":
             self.apagar()
             return f"El dispositivo {self.__nombre_dispositivo} ha sido apagado."
         
-        elif accion.tipo_accion == "cambiar_estado":
+        elif accion.get_tipo_accion() == "cambiar_estado":
             self.cambiar_estado()
             return f"El dispositivo {self.__nombre_dispositivo} ha cambiado su estado."
         
-        elif accion.tipo_accion == "set_nombre":
-            self.set_nombre_dispositivo(accion.valor_configurado)
+        elif accion.get_tipo_accion() == "set_nombre":
+            self.set_nombre_dispositivo(accion.get_valor_configurado())
             return f"El dispositivo ahora se llama {self.__nombre_dispositivo}."
         
-        elif accion.tipo_accion == "set_tipo":
-            self.set_tipo(accion.valor_configurado)
+        elif accion.get_tipo_accion() == "set_tipo":
+            self.set_tipo(accion.get_valor_configurado())
             return f"El dispositivo ahora es de tipo {self.__tipo_dispositivo}."
         
-        elif accion.tipo_accion == "set_estado":
-            self.set_estado(accion.valor_configurado)
+        elif accion.get_tipo_accion() == "set_estado":
+            self.set_estado(accion.get_valor_configurado())
             return f"El estado del dispositivo se configuró como {self.__estado_dispositivo}."
         
         else:
