@@ -1,7 +1,8 @@
-from accion import Accion
+from .accion import Accion
 
 class Dispositivo:
-    def __init__(self, nombre_dispositivo, tipo_dispositivo, estado_dispositivo = False):
+    def __init__(self, nombre_dispositivo, tipo_dispositivo, estado_dispositivo = False,id = None):
+        self.id = id
         self.nombre_dispositivo = nombre_dispositivo
         self.tipo_dispositivo = tipo_dispositivo
         self.estado_dispositivo = estado_dispositivo

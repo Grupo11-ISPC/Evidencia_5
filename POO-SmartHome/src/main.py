@@ -1,280 +1,244 @@
-from usuario import Usuario
-from dispositivo import Dispositivo
+from dominio.usuario import Usuario
+from dominio.dispositivo import Dispositivo
+from dominio.automatizacion import Automatizacion
+from dominio.accion import Accion
+
+from dao.usuario_dao import UsuarioDAO
+from dao.dispositivo_dao import DispositivoDAO
+from conn.db_conn import conn, cursor
 import os
 
+# Helpers
 def limpiar():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def pausar():
-    input("\nPresioná Enter para continuar...")
+    input("\nPresiona Enter para continuar...")
 
 # Variables globales
-usuarios = []
 usuario_actual = None
-dispositivos_compartidos = []
+usuario_dao = UsuarioDAO()
+dispositivo_dao = DispositivoDAO()
 
-# ========== REGISTRO E INICIO DE SESIÓN ==========
-
+# Registro e inicio de sesión
 def registrar_usuario():
-    while True:
-        limpiar()
-        print("=== REGISTRO ===")
-        nombre = input("Nombre: ").strip()
-        
-        if not nombre:
-            print("❌ El nombre no puede estar vacío")
-            pausar()
-            continue
-        
-        email = input("Email: ").strip()
-        # Validar formato de email
-        if not email or "@" not in email or "." not in email.split("@")[-1]:
-            print("❌ Email inválido. Debe contener @ y un dominio válido (ej: usuario@email.com)")
-            pausar()
-            continue
-        
-        password = input("Password (mín 6 caracteres): ").strip()
-        
-        if len(password) < 6:
-            print("❌ La contraseña debe tener al menos 6 caracteres")
-            pausar()
-            continue
-    
-        # Primer usuario es admin
-        if len(usuarios) == 0:
-            rol = "admin"
-            print("\n✓ Primer usuario registrado como ADMIN")
-        else:
-            rol = "user"
-            print("\n✓ Registrado como usuario estándar")
-        
-        try:
-            usuario = Usuario(nombre, email, password, rol)
-            usuarios.append(usuario)
-            print(f"✓ {nombre} registrado exitosamente")
-            break
-        except ValueError as e:
-            print(f"❌ Error: {e}")
-            pausar()
+    limpiar()
+    print("REGISTRO DE USUARIO")
+    nombre = input("Nombre: ").strip()
+    email = input("Email: ").strip()
+    password = input("Password (min 6 caracteres): ").strip()
+    rol = "admin" if len(usuario_dao.listar()) == 0 else "user"
+
+    try:
+        usuario = Usuario(nombre, email, password, rol)
+        usuario_dao.guardar(usuario)
+        print(f"Usuario {nombre} registrado como {rol}")
+    except ValueError as e:
+        print(f"Error: {e}")
+    pausar()
 
 def iniciar_sesion():
     global usuario_actual
     limpiar()
-    print("=== INICIAR SESIÓN ===")
+    print("INICIO DE SESIÓN")
     email = input("Email: ").strip()
     password = input("Password: ").strip()
-    
-    for usuario in usuarios:
-        if usuario.get_email() == email and usuario.password == password:
-            usuario_actual = usuario
-            print(f"\n✓ Bienvenido {usuario.get_nombre()}")
+    usuarios = usuario_dao.listar()
+
+    for fila in usuarios:
+        id, nombre, mail, pwd, rol = fila
+        if mail == email and pwd == password:
+            usuario_actual = Usuario(nombre, mail, pwd, rol, id)
+            print(f"Bienvenido {nombre}")
             pausar()
             return True
-    
-    print("\n❌ Credenciales incorrectas")
+
+    print("Credenciales incorrectas")
     pausar()
     return False
 
-# ========== MENÚ USUARIO ESTÁNDAR ==========
-
-def consultar_datos_personales():
-    limpiar()
-    print("=== DATOS PERSONALES ===\n")
-    print(f"Nombre: {usuario_actual.get_nombre()}")
-    print(f"Email: {usuario_actual.get_email()}")
-    print(f"Rol: {usuario_actual.get_rol()}")
-    print(f"Dispositivos compartidos: {len(dispositivos_compartidos)}")
-
-def consultar_dispositivos():
-    limpiar()
-    print("=== DISPOSITIVOS ===\n")
-    if not dispositivos_compartidos:
-        print("No hay dispositivos en el sistema.")
-    else:
-        for i, disp in enumerate(dispositivos_compartidos, 1):
-            print(f"{i}. {disp}")
-
-def menu_estandar():
-    global usuario_actual
+# Menús
+def menu_usuario():
     while True:
         limpiar()
-        print(f"=== MENÚ USUARIO - {usuario_actual.get_nombre()} ===")
-        print("\n1. Consultar datos personales")
+        print(f"MENU USUARIO - {usuario_actual.get_nombre()}")
+        print("1. Consultar datos personales")
         print("2. Consultar dispositivos")
         print("0. Cerrar sesión")
-        
-        opcion = input("\nOpción: ")
-        
+        opcion = input("Opción: ")
+
         if opcion == "1":
-            consultar_datos_personales()
+            limpiar()
+            print(f"Nombre: {usuario_actual.get_nombre()}")
+            print(f"Email: {usuario_actual.get_email()}")
+            print(f"Rol: {usuario_actual.get_rol()}")
             pausar()
         elif opcion == "2":
-            consultar_dispositivos()
+            limpiar()
+            dispositivos = dispositivo_dao.listar()
+            if not dispositivos:
+                print("No hay dispositivos.")
+            else:
+                for i, d in enumerate(dispositivos, 1):
+                    print(f"{i}. {d[1]} ({d[2]}) - Estado: {'Encendido' if d[3] else 'Apagado'}")
             pausar()
         elif opcion == "0":
-            usuario_actual = None
             break
         else:
-            print("❌ Opción inválida")
+            print("Opción inválida")
             pausar()
 
-# ========== MENÚ ADMIN ==========
+def menu_admin():
+    while True:
+        limpiar()
+        print(f"MENU ADMIN - {usuario_actual.get_nombre()}")
+        print("1. Gestionar dispositivos")
+        print("2. Cambiar rol de usuario")
+        print("0. Cerrar sesión")
+        opcion = input("Opción: ")
 
+        if opcion == "1":
+            gestionar_dispositivos()
+        elif opcion == "2":
+            cambiar_rol()
+        elif opcion == "0":
+            break
+        else:
+            print("Opción inválida")
+            pausar()
+
+# Funciones admin
 def gestionar_dispositivos():
     while True:
         limpiar()
-        print("=== GESTIÓN DE DISPOSITIVOS ===")
-        print("\n1. Agregar dispositivo")
-        print("2. Listar dispositivos")
-        print("3. Buscar dispositivo")
-        print("4. Eliminar dispositivo")
+        print("GESTIÓN DE DISPOSITIVOS")
+        print("1. Agregar")
+        print("2. Listar")
+        print("3. Modificar")
+        print("4. Eliminar")
         print("0. Volver")
-        
-        opcion = input("\nOpción: ")
-        
+        opcion = input("Opción: ")
+
         if opcion == "1":
             limpiar()
             nombre = input("Nombre: ").strip()
             tipo = input("Tipo: ").strip()
             disp = Dispositivo(nombre, tipo)
-            usuario_actual.agregar_dispositivo(disp)
-            dispositivos_compartidos.append(disp)
-            print(f"\n✓ Dispositivo {nombre} agregado")
+            dispositivo_dao.guardar(disp)
+            print("Dispositivo agregado")
             pausar()
-            
+
         elif opcion == "2":
             limpiar()
-            print("=== DISPOSITIVOS ===\n")
-            if not dispositivos_compartidos:
-                print("No hay dispositivos")
+            dispositivos = dispositivo_dao.listar()
+            if not dispositivos:
+                print("No hay dispositivos.")
             else:
-                for i, d in enumerate(dispositivos_compartidos, 1):
-                    print(f"{i}. {d}")
+                for i, d in enumerate(dispositivos, 1):
+                    print(f"{i}. {d[1]} ({d[2]}) - Estado: {'Encendido' if d[3] else 'Apagado'}")
             pausar()
-            
+
         elif opcion == "3":
             limpiar()
-            nombre = input("Nombre a buscar: ").strip()
-            encontrado = False
-            for d in dispositivos_compartidos:
-                if d.get_nombre_dispositivo().lower() == nombre.lower():
-                    print(f"\n✓ Encontrado: {d}")
-                    encontrado = True
-                    break
-            if not encontrado:
-                print(f"❌ No se encontró '{nombre}'")
+            dispositivos = dispositivo_dao.listar()
+            if not dispositivos:
+                print("No hay dispositivos para modificar.")
+                pausar()
+                continue
+
+            for i, d in enumerate(dispositivos, 1):
+                print(f"{i}. {d[1]} ({d[2]})")
+            try:
+                idx = int(input("Número de dispositivo a modificar: ")) - 1
+                if 0 <= idx < len(dispositivos):
+                    d = dispositivos[idx]
+                    nuevo_nombre = input("Nuevo nombre: ").strip()
+                    nuevo_tipo = input("Nuevo tipo: ").strip()
+                    # Creamos el objeto con el ID existente
+                    disp = Dispositivo(nuevo_nombre, nuevo_tipo, bool(d[3]), id=d[0])
+                    dispositivo_dao.modificar(disp)
+                    print("Dispositivo modificado")
+                else:
+                    print("Dispositivo no encontrado")
+            except ValueError:
+                print("Entrada inválida")
             pausar()
-            
+
         elif opcion == "4":
             limpiar()
-            nombre = input("Nombre a eliminar: ").strip()
-            for i, d in enumerate(dispositivos_compartidos):
-                if d.get_nombre_dispositivo().lower() == nombre.lower():
-                    dispositivos_compartidos.pop(i)
-                    if d in usuario_actual.dispositivos:
-                        usuario_actual.dispositivos.remove(d)
-                    print(f"\n✓ Dispositivo {nombre} eliminado")
-                    pausar()
-                    break
-            else:
-                print(f"❌ No se encontró '{nombre}'")
+            dispositivos = dispositivo_dao.listar()
+            if not dispositivos:
+                print("No hay dispositivos para eliminar.")
                 pausar()
-                
-        elif opcion == "0":
-            break
-        else:
-            print("❌ Opción inválida")
+                continue
+
+            for i, d in enumerate(dispositivos, 1):
+                print(f"{i}. {d[1]} ({d[2]})")
+            try:
+                idx = int(input("Número de dispositivo a eliminar: ")) - 1
+                if 0 <= idx < len(dispositivos):
+                    d = dispositivos[idx]
+                    # Creamos el objeto con el ID para que el DAO lo pueda eliminar
+                    disp = Dispositivo(d[1], d[2], bool(d[3]), id=d[0])
+                    dispositivo_dao.eliminar(disp)
+                    print("Dispositivo eliminado")
+                else:
+                    print("Dispositivo no encontrado")
+            except ValueError:
+                print("Entrada inválida")
             pausar()
 
-def cambiar_rol_usuario():
+        elif opcion == "0":
+            break
+
+        else:
+            print("Opción inválida")
+            pausar()
+
+
+def cambiar_rol():
     limpiar()
-    print("=== CAMBIAR ROL ===\n")
-    
-    if len(usuarios) <= 1:
-        print("No hay otros usuarios")
-        pausar()
-        return
-    
+    usuarios = usuario_dao.listar()
     for i, u in enumerate(usuarios, 1):
-        print(f"{i}. {u.get_nombre()} - {u.get_email()} ({u.get_rol()})")
-    
+        print(f"{i}. {u[1]} ({u[2]}) - Rol: {u[4]}")
     try:
-        num = int(input("\nNúmero de usuario: ")) - 1
+        num = int(input("Número de usuario: ")) - 1
         if 0 <= num < len(usuarios):
             seleccionado = usuarios[num]
-            
-            if seleccionado == usuario_actual:
-                print("❌ No podés cambiar tu propio rol")
+            if seleccionado[2] == usuario_actual.get_email():
+                print("No puedes cambiar tu propio rol")
             else:
-                print(f"\nUsuario: {seleccionado.get_nombre()}")
-                print("1. Admin")
-                print("2. Usuario")
-                nuevo = input("Nuevo rol: ")
-                
-                if nuevo == "1":
-                    seleccionado.set_rol("admin")
-                    print("✓ Cambiado a admin")
-                elif nuevo == "2":
-                    seleccionado.set_rol("usuario")
-                    print("✓ Cambiado a usuario")
-                else:
-                    print("❌ Opción inválida")
-        else:
-            print("❌ Número inválido")
-    except ValueError:
-        print("❌ Entrada inválida")
+                nuevo_rol = input("Nuevo rol (admin/user): ").strip()
+                usuario_obj = Usuario(seleccionado[1], seleccionado[2], seleccionado[3], nuevo_rol, seleccionado[0])
+                usuario_dao.modificar(usuario_obj)
+                print("Rol cambiado")
+    except:
+        print("Entrada inválida")
     pausar()
 
-def menu_admin():
-    global usuario_actual
-    while True:
-        limpiar()
-        print(f"=== MENÚ ADMIN - {usuario_actual.get_nombre()} ===")
-        print("\n1. Gestionar dispositivos")
-        print("2. Cambiar rol de usuario")
-        print("0. Cerrar sesión")
-        
-        opcion = input("\nOpción: ")
-        
-        if opcion == "1":
-            gestionar_dispositivos()
-        elif opcion == "2":
-            cambiar_rol_usuario()
-        elif opcion == "0":
-            usuario_actual = None
-            break
-        else:
-            print("❌ Opción inválida")
-            pausar()
-
-
-
-# ========== MENÚ PRINCIPAL ==========
-
+# Main
 def main():
     while True:
         limpiar()
-        print("=== SMART HOME ===")
-        print("\n1. Registrar usuario")
+        print("SMART HOME")
+        print("1. Registrar usuario")
         print("2. Iniciar sesión")
         print("0. Salir")
-        
-        opcion = input("\nOpción: ")
-        
+        opcion = input("Opción: ")
+
         if opcion == "1":
             registrar_usuario()
-            pausar()
         elif opcion == "2":
             if iniciar_sesion():
                 if usuario_actual.get_rol() == "admin":
                     menu_admin()
                 else:
-                    menu_estandar()
+                    menu_usuario()
         elif opcion == "0":
-            print("\n👋 Hasta luego!")
+            print("Hasta luego")
             break
         else:
-            print("❌ Opción inválida")
+            print("Opción inválida")
             pausar()
 
 if __name__ == "__main__":

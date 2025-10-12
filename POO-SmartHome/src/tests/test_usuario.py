@@ -1,7 +1,7 @@
-from src.usuario import Usuario
-from src.dispositivo import Dispositivo
-from src.automatizacion import Automatizacion
-from src.accion import Accion
+from dominio.usuario import Usuario
+from dominio.dispositivo import Dispositivo
+from dominio.automatizacion import Automatizacion
+from dominio.accion import Accion
 
 def test_creacion_usuario():
     u = Usuario("Juan", "1234")

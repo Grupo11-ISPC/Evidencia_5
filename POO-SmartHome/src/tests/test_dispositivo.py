@@ -1,4 +1,4 @@
-from src.dispositivo import Dispositivo
+from dominio.dispositivo import Dispositivo
 
 def test_creacion_dispositivo():
     d = Dispositivo("Luz", "Apagado")

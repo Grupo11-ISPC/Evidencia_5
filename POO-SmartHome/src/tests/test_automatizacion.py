@@ -1,6 +1,6 @@
-from src.automatizacion import Automatizacion
-from src.dispositivo import Dispositivo
-from src.accion import Accion
+from dominio.automatizacion import Automatizacion
+from dominio.dispositivo import Dispositivo
+from dominio.accion import Accion
 
 def test_automatizacion_con_dispositivos():
     auto = Automatizacion("Prueba de automatización")
