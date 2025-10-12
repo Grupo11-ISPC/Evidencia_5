@@ -2,7 +2,7 @@ from dominio.dispositivo import Dispositivo
 
 def test_creacion_dispositivo():
     d = Dispositivo("Luz", "Apagado")
-    assert d.nombre_dispositivo == "Luz"
+    assert d.get_nombre_dispositivo() == "Luz"
     assert d.get_estado() == "Apagado"
 
 def test_str():
