@@ -15,6 +15,12 @@ class Usuario:
         self.dispositivos.append(dispositivo)
         return f"Dispositivo {dispositivo.get_nombre_dispositivo()} agregado."
     
+    def eliminar_dispositivo(self, dispositivo):
+        if dispositivo in self.dispositivos:
+            self.dispositivos.remove(dispositivo)
+            return f"Dispositivo {dispositivo.get_nombre_dispositivo()} eliminado."
+        return "Dispositivo no encontrado."     
+    
     def agregar_automatizacion(self, automatizacion):
         self.automatizaciones.append(automatizacion)
         return f"Automatización {automatizacion.get_descripcion()} agregada."

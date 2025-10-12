@@ -47,7 +47,8 @@ class Dispositivo:
         if self.estado_dispositivo:
             self.apagar()
         else:
-            self.encender()          
+            self.encender()     
+  
 
     #Getters y Setters
     def set_nombre_dispositivo(self, nombre_dispositivo):
@@ -63,7 +64,8 @@ class Dispositivo:
         self.tipo_dispositivo= tipo_dispositivo
     
     def get_estado(self):
-        return self.estado_dispositivo
+        return "Encendido" if self.estado_dispositivo else "Apagado"
+
 
     def set_estado(self, estado_dispositivo):
         self.estado_dispositivo = estado_dispositivo
