@@ -1,4 +1,4 @@
-from src.dominio.accion import Accion
+from dominio.accion import Accion
 
 def test_creacion_accion():
     accion = Accion("Encender", 5)
