@@ -4,10 +4,11 @@ from dominio.dispositivo import Dispositivo
 
 class DispositivoDAO(IDispositivoDAO):
     def guardar(self, dispositivo):
+        estado_int = 1 if dispositivo.get_estado() == "Encendido" else 0
         cursor.execute(
             "INSERT INTO dispositivos (nombre, tipo, estado) VALUES (?, ?, ?)",
-            (dispositivo.get_nombre_dispositivo(), dispositivo.get_tipo(), int(dispositivo.get_estado()))
-        )
+            (dispositivo.get_nombre_dispositivo(), dispositivo.get_tipo(), estado_int))
+    
         conn.commit()
 
     def listar(self):
@@ -15,11 +16,12 @@ class DispositivoDAO(IDispositivoDAO):
         return cursor.fetchall()  # devuelve lista de tuplas: (id, nombre, tipo, estado, usuario_id)
 
     def modificar(self, dispositivo: Dispositivo):
+        estado_int = 1 if dispositivo.get_estado() == "Encendido" else 0
         if dispositivo.id is None:
             raise ValueError("Dispositivo debe tener un ID para modificarlo")
         cursor.execute(
             "UPDATE dispositivos SET nombre = ?, tipo = ?, estado = ? WHERE id = ?",
-            (dispositivo.get_nombre_dispositivo(), dispositivo.get_tipo(), int(dispositivo.get_estado()), dispositivo.id)
+            (dispositivo.get_nombre_dispositivo(), dispositivo.get_tipo(), estado_int, dispositivo.id)
         )
         conn.commit()
 
