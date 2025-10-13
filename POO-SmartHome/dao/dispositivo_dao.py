@@ -17,18 +17,18 @@ class DispositivoDAO(IDispositivoDAO):
 
     def modificar(self, dispositivo: Dispositivo):
         estado_int = 1 if dispositivo.get_estado() == "Encendido" else 0
-        if dispositivo.id is None:
+        if dispositivo.get_id() is None:
             raise ValueError("Dispositivo debe tener un ID para modificarlo")
         cursor.execute(
             "UPDATE dispositivos SET nombre = ?, tipo = ?, estado = ? WHERE id = ?",
-            (dispositivo.get_nombre_dispositivo(), dispositivo.get_tipo(), estado_int, dispositivo.id)
+            (dispositivo.get_nombre_dispositivo(), dispositivo.get_tipo(), estado_int, dispositivo.get_id())
         )
         conn.commit()
 
     def eliminar(self, dispositivo):
-        if dispositivo.id is None:
+        if dispositivo.get_id() is None:
             raise ValueError("Dispositivo debe tener un ID para eliminarlo")
-        cursor.execute("DELETE FROM dispositivos WHERE id = ?", (dispositivo.id,))
+        cursor.execute("DELETE FROM dispositivos WHERE id = ?", (dispositivo.get_id(),))
         conn.commit()
 
     def obtener_por_id(self, id):
