@@ -68,6 +68,11 @@ class Dispositivo:
 
     def set_estado(self, estado_dispositivo):
         self.__estado_dispositivo = estado_dispositivo
+    
+    
+    def get_id(self):
+        return self.__id
+
 
     #Estado
     def __str__(self):

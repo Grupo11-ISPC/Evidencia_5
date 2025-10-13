@@ -1,5 +1,7 @@
 class Usuario:
     def __init__(self, nombre, email, password, rol,id=None):
+        if not Usuario.validar_usuario(nombre, email, password, rol):
+            raise ValueError("Datos de usuario inválidos.")
         self.__id = id
         self.__nombre = nombre
         self.__email = email
@@ -7,9 +9,8 @@ class Usuario:
         self.__rol = rol
         self.__dispositivos = []
         self.__automatizaciones = []
-        if not Usuario.validar_usuario(nombre, email, password, rol):
-            raise ValueError("Datos de usuario inválidos.")
-    
+        
+
     def agregar_dispositivo(self, dispositivo):
         self.__dispositivos.append(dispositivo)
         return f"Dispositivo {dispositivo.get_nombre_dispositivo()} agregado."
