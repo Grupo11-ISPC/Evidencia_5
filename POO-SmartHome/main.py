@@ -20,13 +20,42 @@ usuario_actual = None
 usuario_dao = UsuarioDAO()
 dispositivo_dao = DispositivoDAO()
 
+#validador de ingreso de datos
+def pedir_dato(mensaje):
+    while True:
+        valor = input(mensaje).strip() 
+        if not valor: 
+            print("Error: el dato no puede estar vacío.")
+        else:
+            return valor
+
+
 # Registro e inicio de sesión
 def registrar_usuario():
     limpiar()
     print("REGISTRO DE USUARIO")
-    nombre = input("Nombre: ").strip()
-    email = input("Email: ").strip()
-    password = input("Password (min 6 caracteres): ").strip()
+    nombre = pedir_dato("Nombre: ")
+
+#valiador ingreso mail correcto
+    while True:
+        email = input("Email: ").strip()
+        if not email:
+            print("Error: el correo no puede estar vacío")
+        elif "@" not in email or "." not in email:
+            print("Error: el correo debe contener '@' y '.'")
+        else:
+            print("Correo válido:", email)
+            break
+
+#validador de caracteres de contraseña
+    while True:
+        password = pedir_dato("Password (min 6 caracteres): ")#con pedir_dato()valido que no sea vacio
+        if len(password)<6:
+            print("Error: la contraseña debe tener al menos 6 caracteres")
+        else:
+            print("contraseña valida")
+            break
+        
     rol = "admin" if len(usuario_dao.listar()) == 0 else "user"
 
     try:
