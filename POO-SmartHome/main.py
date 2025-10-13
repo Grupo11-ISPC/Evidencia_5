@@ -58,12 +58,19 @@ def registrar_usuario():
         
     rol = "admin" if len(usuario_dao.listar()) == 0 else "user"
 
-    try:
-        usuario = Usuario(nombre, email, password, rol)
-        usuario_dao.guardar(usuario)
+    if not Usuario.validar_usuario(nombre, email, password, rol):
+        print("Datos inválidos: revisa nombre, email, contraseña o rol")
+        pausar()
+        return
+    
+    usuario = Usuario(nombre, email, password, rol)
+    id_nuevo = usuario_dao.guardar(usuario)
+
+    if id_nuevo:
         print(f"Usuario {nombre} registrado como {rol}")
-    except ValueError as e:
-        print(f"Error: {e}")
+    else:
+        print(" No se pudo registrar el usuario (el email ya existe o hubo un error)")
+
     pausar()
 
 def iniciar_sesion():
