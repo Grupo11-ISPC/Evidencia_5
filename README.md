@@ -1,61 +1,63 @@
-# Smart Home Solutions - Sistema de Gestión de Hogar Inteligente
+# 🏠 Smart Home Solutions - Sistema de Gestión de Hogar Inteligente
 
-## 📋 Propósito
+## 📘 Descripción General
 
-Este proyecto consiste en un sistema integral de gestión de hogar inteligente que permite a los usuarios controlar y automatizar dispositivos domésticos a través de una interfaz de línea de comandos. El sistema está diseñado para facilitar la administración de dispositivos IoT, crear automatizaciones personalizadas y gestionar usuarios con diferentes niveles de permisos.
+**Smart Home Solutions** es un sistema integral de gestión de hogares inteligentes que permite controlar y automatizar dispositivos IoT a través de una interfaz de línea de comandos. Esta solución está diseñada para facilitar el manejo centralizado de dispositivos, la creación de automatizaciones personalizadas y la gestión de usuarios con distintos niveles de acceso.
 
-## 🎯 Contexto
+## 🎯 Objetivo
 
-En la era de la domótica y el Internet de las Cosas (IoT), existe una creciente necesidad de sistemas que permitan gestionar de manera eficiente múltiples dispositivos inteligentes en el hogar. Este proyecto surge como respuesta a esa necesidad, ofreciendo una solución completa que integra:
+En un contexto donde la domótica y el Internet de las Cosas (IoT) son cada vez más comunes, surge la necesidad de contar con herramientas que integren y simplifiquen el control de múltiples dispositivos inteligentes. Este proyecto busca cubrir esa necesidad mediante:
 
-- **Gestión de dispositivos**: Control de iluminación, climatización, seguridad y energía
-- **Automatizaciones inteligentes**: Programación de acciones basadas en condiciones específicas
-- **Control de acceso**: Sistema de usuarios con roles diferenciados (administrador/usuario)
-- **Persistencia de datos**: Base de datos SQLite para almacenamiento confiable
+- ✅ **Gestión de dispositivos**: iluminación, climatización, seguridad y energía.
+- ⚙️ **Automatizaciones inteligentes**: ejecución de acciones según condiciones definidas.
+- 🔐 **Control de acceso**: usuarios con diferentes roles y permisos.
+- 💾 **Persistencia de datos**: almacenamiento confiable con SQLite.
 
-El proyecto se desarrolló como evidencia práctica de conceptos de POO, BD y patrón de arqutectura DAO.
+Además, esta aplicación fue desarrollada como evidencia práctica de conceptos clave como **Programación Orientada a Objetos (POO)**, **manejo de bases de datos relacionales** y el patrón de arquitectura **DAO (Data Access Object)**.
 
-## 🔧 Alcance
+---
 
-### Funcionalidades Implementadas
+## 🧰 Funcionalidades Principales
 
-#### **Gestión de Usuarios**
-- Registro de nuevos usuarios con validación de datos
-- Sistema de autenticación (login/logout)
-- Dos roles de usuario: administrador y usuario estándar
-- Modificación de roles (solo por administradores)
-- Consulta de datos personales
+### 👤 Gestión de Usuarios
+- Registro con validación de datos.
+- Inicio y cierre de sesión (login/logout).
+- Roles de usuario: **administrador** y **usuario estándar**.
+- Modificación de roles (exclusiva para administradores).
+- Consulta de información personal.
 
-#### **Gestión de Dispositivos**
-- CRUD completo (Crear, Leer, Actualizar, Eliminar) de dispositivos
+### 💡 Gestión de Dispositivos
+- Operaciones **CRUD** (Crear, Leer, Actualizar, Eliminar).
 - Tipos de dispositivos soportados:
   - Iluminación
   - Climatización
   - Seguridad
   - Energía
-- Control de estado (encendido/apagado)
-- Asignación de dispositivos a usuarios
+- Encendido y apagado de dispositivos.
+- Asignación de dispositivos a usuarios.
 
-#### **Sistema de Automatizaciones**
-- Creación de automatizaciones con condiciones personalizadas
-- Asociación de acciones a dispositivos
-- Ejecución de múltiples acciones en secuencia
+### 🤖 Sistema de Automatizaciones
+- Creación de reglas condicionales personalizadas.
+- Asociación de múltiples acciones por evento.
 - Tipos de acciones disponibles:
-  - Encender/Apagar dispositivos
-  - Cambiar estado
-  - Notificaciones
-  - Configuración de valores
+  - Encendido/apagado de dispositivos.
+  - Modificación de estados.
+  - Envío de notificaciones.
+  - Configuración de valores personalizados.
 
-#### **Base de Datos**
-- Modelo relacional con 4 tablas principales:
-  - `usuarios`: Información de usuarios del sistema
-  - `dispositivos`: Catálogo de dispositivos IoT
-  - `automatizaciones`: Reglas de automatización
-  - `acciones`: Acciones vinculadas a automatizaciones
-- Integridad referencial mediante claves foráneas
-- Consultas SQL optimizadas (simples, multitabla y subconsultas)
+### 🗃️ Persistencia y Base de Datos
+- Estructura relacional compuesta por 4 tablas principales:
+  - `usuarios`: información personal y roles.
+  - `dispositivos`: catálogo de dispositivos IoT.
+  - `automatizaciones`: definición de reglas automáticas.
+  - `acciones`: conjunto de operaciones asociadas a cada automatización.
+- Uso de claves foráneas para mantener la integridad referencial.
+- Consultas SQL optimizadas (simples, multitabla, subconsultas).
 
-### Arquitectura del Proyecto
+---
+
+## 🧱 Arquitectura del Proyecto
+
 
 ```
 POO-SmartHome/
@@ -84,22 +86,29 @@ BD-Evidencia-6/             # Scripts SQL adicionales
 └── consultasDML.sql        # Datos de prueba y consultas
 ```
 
-### Tecnologías Utilizadas
+## 🛠️ Tecnologías Utilizadas
 
-- **Lenguaje**: Python 3.x
-- **Base de datos**: SQLite 3
+- **Lenguaje**: Python 3.x  
+- **Base de Datos**: SQLite 3
 
-**Posibles mejoras futuras:**
-- Implementación de una interfaz web o móvil
-- Soporte para más tipos de dispositivos
-- Sistema de horarios avanzado (scheduler)
-- Reportes y estadísticas de uso
-- Respaldos automáticos de la base de datos
-- Encriptación de contraseñas con hashing
+---
+
+## 🚀 Posibles Mejoras Futuras
+
+- Desarrollo de una **interfaz gráfica (GUI)** o aplicación móvil.
+- Soporte para **nuevas categorías de dispositivos** inteligentes.
+- Implementación de un **sistema de programación de tareas** (scheduler).
+- Generación de **reportes y estadísticas de uso**.
+- **Respaldos automáticos** de la base de datos.
+- **Encriptación de contraseñas** mediante hashing seguro.
+
+---
 
 ## 👥 Autores
-•	42258135 Victor Andrés Bianchi Núñez 
-•	42383964 Federico David Udovich 
-•	35257982 Federico Martin Pierrestegui 
-•	36223373 Gabriel Alejandro Farias 
+
+- 📌 Victor Andrés Bianchi Núñez – `DNI: 42.258.135`  
+- 📌 Federico David Udovich – `DNI: 42.383.964`  
+- 📌 Federico Martín Pierrestegui – `DNI: 35.257.982`  
+- 📌 Gabriel Alejandro Farias – `DNI: 36.223.373`  
+
 ---
