@@ -44,6 +44,7 @@ class DispositivoDAO(IDispositivoDAO):
                 ConexionDB.cerrar_conexion(conexion)
 
     def obtener_por_id(self, id_dispositivo: int):
+        """Busca y devuelve un dispositivo por su ID (sin usar dictionary=True)"""
         conexion = None
         cursor = None
         try:
@@ -56,7 +57,7 @@ class DispositivoDAO(IDispositivoDAO):
                     WHERE id = %s
                 """
                 cursor.execute(sql, (id_dispositivo,))
-                fila = cursor.fetchall() 
+                fila = cursor.fetchall()  # una sola fila
 
                 if fila:
                     dispositivo = Dispositivo(
