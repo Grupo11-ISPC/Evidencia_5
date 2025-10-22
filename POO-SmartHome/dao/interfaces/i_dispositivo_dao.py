@@ -3,7 +3,7 @@ from dominio.dispositivo import Dispositivo
 
 class IDispositivoDAO(ABC):
     @abstractmethod
-    def guardar(self, dispositivo: Dispositivo, usuario_id=None):
+    def crear_dispositivo(self, dispositivo: Dispositivo, id_usuario: int):
         pass
 
     @abstractmethod
@@ -11,13 +11,17 @@ class IDispositivoDAO(ABC):
         pass
 
     @abstractmethod
-    def listar(self):
+    def listar_dispositivo(self):
         pass
 
     @abstractmethod
-    def modificar(self, dispositivo: Dispositivo):
+    def modificar_dispositivo(self, dispositivo: Dispositivo):
         pass
 
     @abstractmethod
-    def eliminar(self, dispositivo: Dispositivo):
+    def eliminar_dispositivo(self, id_dispositivo: int):
+        pass
+
+    @abstractmethod
+    def get_nombre_dispositivo(self, id_dispositivo: int):
         pass
