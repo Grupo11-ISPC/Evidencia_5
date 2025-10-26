@@ -1,6 +1,3 @@
--- ========== INSERT ==========
-
--- Insertar usuarios
 INSERT INTO usuarios (nombre, email, password, rol) VALUES
 ('Ana', 'ana.garcia@email.com', '$2y$10$abcdefghijk', 'admin'),
 ('Luis', 'luis.perez@email.com', '$2y$10$lmnopqrstuv', 'usuario'),
@@ -11,8 +8,6 @@ INSERT INTO usuarios (nombre, email, password, rol) VALUES
 ('Andres', 'andres@email.com', '$2y$10$opqrstuvwxy', 'usuario'),
 ('Gabriel', 'gabriel@email.com', '$2y$10$zabcdefghij', 'usuario');
 
-
--- Insertar dispositivos
 INSERT INTO dispositivos (nombre_dispositivo, tipo_dispositivo, estado_dispositivo, id_usuario) VALUES
 ('luz Sala', 'Iluminacion', 1, 1),
 ('Termostato', 'Climatizacion', 0, 1),
@@ -29,8 +24,7 @@ INSERT INTO dispositivos (nombre_dispositivo, tipo_dispositivo, estado_dispositi
 ('Enchufe PC', 'Energia', 1, 8),
 ('Camara Interior', 'Seguridad', 0, 6);
 
--- Insertar automatizaciones
-INSERT INTO automatizacion (descripcion, condicion, id_usuario) VALUES
+INSERT INTO automatizaciones (descripcion, condicion, id_usuario) VALUES
 ('Encender luces al anochecer', 'hora = 20:00', 1),
 ('Apagar termostato si ventana abierta', 'sensor_puerta = 1', 1),
 ('Encender enchufe Cocina al llegar a casa', 'usuario_llega = 1', 2),
@@ -44,75 +38,70 @@ INSERT INTO automatizacion (descripcion, condicion, id_usuario) VALUES
 ('Activar camara interior si no hay movimiento por 10 min', 'sensor_movimiento = 0 AND tiempo > 10', 7),
 ('Notificar movimiento detectado en sala', 'sensor_movimiento = 1', 6);
 
--- Insertar acciones 
-INSERT INTO acciones (tipo_accion, valor_configurado, id_automatizacion) VALUES
-('encender', 'dispositivo_id=1', 1),
-('cambiar_estado', 'dispositivo_id=2', 1),
-('apagar', 'dispositivo_id=3', 2),
-('notificar', 'dispositivo_id=4', 2),
-('encender', 'dispositivo_id=6', 1),
-('apagar', 'dispositivo_id=2', 2),
-('encender', 'dispositivo_id=3', 3),
-('notificar', 'dispositivo_id=4', 4),
-('apagar', 'dispositivo_id=1', 5),
-('apagar', 'dispositivo_id=10', 5),
-('encender', 'dispositivo_id=5', 6),
-('encender', 'dispositivo_id=7', 7),
-('notificar', 'dispositivo_id=9', 8),
-('encender', 'dispositivo_id=12', 9),
-('apagar', 'dispositivo_id=13', 10),
-('encender', 'dispositivo_id=14', 11),
-('notificar', 'dispositivo_id=11', 12);
+INSERT INTO acciones (tipo_accion, valor_configurado, id_automatizacion, id_dispositivo) VALUES
+('encender', 'Luz Sala', 1, 1),
+('cambiar_estado', 'Termostato', 1, 2),
+('apagar', 'Enchufe Cocina', 2, 3),
+('notificar', 'Sensor Puerta', 2, 4),
+('encender', 'Luz Dormitorio', 1, 6),
+('apagar', 'Termostato', 2, 2),
+('encender', 'Enchufe Cocina', 3, 3),
+('notificar', 'Sensor Puerta', 4, 4),
+('apagar', 'Luz Sala', 5, 1),
+('apagar', 'Luz Jardin', 5, 10),
+('encender', 'Camara Exterior', 6, 5),
+('encender', 'Aire Acondicionado', 7, 7),
+('notificar', 'Detector Humo', 8, 9);
 
-
--- ========== CONSULTAS SIMPLES ==========
+-- fetch 
+-- CONSULTAS SIMPLES DE LAS TABLAS
 SELECT * FROM usuarios;
 SELECT * FROM dispositivos;
-SELECT * FROM automatizacion;
+SELECT * FROM automatizaciones;
 SELECT * FROM acciones;
 
+-- CONSULTAS MULTITABLA--   
 
--- ========== CONSULTAS MULTITABLA ==========
-
-/* Esta consulta trae el nombre del dispositivo y el tipo, de los usuarios */
+/*esta consulta trae el nombre del dispositivo y el tipo, de los usuarios */
 SELECT u.nombre AS usuario, d.nombre_dispositivo, d.tipo_dispositivo
 FROM dispositivos d
-INNER JOIN usuarios u ON d.id_usuario = u.id;
+INNER JOIN usuarios u ON d.id_usuario = u.id_usuario;
 
-/* Esta consulta trae la descripcion y la condicion de las automatizaciones que tiene cada usuario */
+/* esta consulta trae la descripcion y la condicion de las automatizaciones que tiene cada usuario*/
 SELECT u.nombre AS usuario, a.descripcion, a.condicion
-FROM automatizacion a
-INNER JOIN usuarios u ON a.id_usuario = u.id;
+FROM automatizaciones a
+INNER JOIN usuarios u ON a.id_usuario = u.id_usuario;
 
-/* Esta consulta nos trae las acciones y los dispositivos que participan en la automatizacion*/
-
-SELECT a.descripcion AS automatizacion, ac.tipo_accion, ac.valor_configurado
+/* esta consulta nos trae las acciones y los dispostivos que participan en la automatizacion*/
+SELECT a.descripcion AS automatizacion, ac.tipo_accion, d.nombre_dispositivo
 FROM acciones ac
-INNER JOIN automatizacion a ON ac.id_automatizacion = a.id;
+INNER JOIN automatizaciones a ON ac.id_automatizacion = a.id_automatizacion
+INNER JOIN dispositivos d ON ac.id_dispositivo = d.id_dispositivo;
 
-/* Esta consulta trae los usuarios con los nombres de dispositivos y automatizaciones que tengan asociados */
+/* esta consulta trae los usuarios con los nombres de dispositivos y automatizaciones que tengan asociados.*/
 SELECT u.nombre AS usuario, d.nombre_dispositivo, a.descripcion AS automatizacion
 FROM usuarios u
-LEFT JOIN dispositivos d ON u.id = d.id_usuario
-LEFT JOIN automatizacion a ON u.id = a.id_usuario
-ORDER BY u.id;
+LEFT JOIN dispositivos d ON u.id_usuario = d.id_usuario
+LEFT JOIN automatizaciones a ON u.id_usuario = a.id_usuario
+ORDER BY u.id_usuario;
 
+-- SUBCONSULTAS--
 
--- ========== SUBCONSULTAS ==========
+/* esta subconsulta muestra los nombres de los usuarios que tienen al menos un dispositivo de tipo seguridad.*/
+SELECT 
+    u.nombre AS usuario, 
+    d.nombre_dispositivo
+FROM usuarios u
+INNER JOIN dispositivos d ON u.id_usuario = d.id_usuario
+WHERE d.tipo_dispositivo = 'Seguridad';
 
-/* Esta subconsulta muestra los nombres de los usuarios que tienen al menos un dispositivo de tipo seguridad */
-SELECT nombre 
-FROM usuarios 
-WHERE id IN (
-    SELECT DISTINCT id_usuario 
-    FROM dispositivos 
-    WHERE tipo_dispositivo = 'Seguridad'
-);
-
-/* Esta subconsulta nos trae la descripcion de las automatizaciones vinculadas a dispositivos encendidos*/
-SELECT descripcion
-FROM automatizacion
-WHERE id IN (
-    SELECT DISTINCT id_automatizacion
+/* esta subconsulta nos trae la descripcion de las automatizaciones que actualmente estan encendidas*/
+SELECT descripcion FROM automatizaciones WHERE id_automatizacion IN (
+    SELECT id_automatizacion
     FROM acciones
+    WHERE id_dispositivo IN (
+        SELECT id_dispositivo
+        FROM dispositivos
+        WHERE estado_dispositivo = 1
+    )
 );

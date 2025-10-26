@@ -1,39 +1,37 @@
--- CREATE DATABASE smart_home_solutions;
--- USE smart_home_solutions;
+CREATE DATABASE smart_home_solutions;
+USE smart_home_solutions;
 
 CREATE TABLE usuarios(
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
-    rol ENUM('admin', 'usuario') DEFAULT 'usuario',
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    rol ENUM('admin', 'usuario') DEFAULT 'usuario'
 );
 
 CREATE TABLE dispositivos(
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_dispositivo INT PRIMARY KEY AUTO_INCREMENT,
     nombre_dispositivo VARCHAR(100),
     tipo_dispositivo VARCHAR(50),
-    estado_dispositivo TINYINT(1) DEFAULT 0,
+    estado_dispositivo TINYINT DEFAULT 0,
     id_usuario INT,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 );
 
-CREATE TABLE automatizacion (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE automatizaciones (
+    id_automatizacion INT PRIMARY KEY AUTO_INCREMENT,
     descripcion VARCHAR(255),
-    condicion TEXT,
+    condicion VARCHAR(255),
     id_usuario INT,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 );
 
 CREATE TABLE acciones (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_accion INT PRIMARY KEY AUTO_INCREMENT,
     tipo_accion VARCHAR(50),
     valor_configurado VARCHAR(255),
     id_automatizacion INT,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_automatizacion) REFERENCES automatizacion(id) ON DELETE CASCADE
+    id_dispositivo INT,
+    FOREIGN KEY (id_automatizacion) REFERENCES automatizaciones(id_automatizacion) ON DELETE CASCADE,
+    FOREIGN KEY (id_dispositivo) REFERENCES dispositivos(id_dispositivo) ON DELETE CASCADE
 );
