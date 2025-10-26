@@ -13,12 +13,4 @@ y las funcionalidades del sistema.
 2. Instrucciones de Ejecución
 
 A continuacón podrás acceder a la página de OneCompiler con los todas las consultas realizadas.
-https://onecompiler.com/sqlite/43zg6a564
-
-
-De lo contrario, aquí puedes seguir el paso a paso:
-Ingresar a https://onecompiler.com/sqlite, allí deberás pegar y ejecutar los siguientes archivos que se encuentran en esta carpeta.
-
-Ejecutar `consultasDDL.sql`: Este es el primer archivo que se debe ejecutar. Al crearse la base de datos y las tablas, se establece la estructura que las consultas DML necesitan para funcionar. Es necesario ejecutar este script primero para evitar errores de referencia a tablas que aún no existen.
-
-Ejecutar `consultasDML.sql`: Después de que la base de datos y las tablas estén creadas, se puede ejecutar este script. Si se ejecuta antes, las instrucciones INSERT fallarán porque las tablas a las que intentan agregar datos no se habrán creado.
+https://onecompiler.com/mysql/442tatvbc
