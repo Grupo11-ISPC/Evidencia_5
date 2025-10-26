@@ -4,10 +4,8 @@ from dao.interfaces.i_dispositivo_dao import IDispositivoDAO
 
 
 class DispositivoDAO(IDispositivoDAO):
-    """Implementación del DAO para Dispositivo"""
 
     def crear_dispositivo(self, dispositivo, id_usuario):
-        """Guarda un nuevo dispositivo asociado a un usuario"""
         conexion = None
         cursor = None
         try:
@@ -44,7 +42,6 @@ class DispositivoDAO(IDispositivoDAO):
                 ConexionDB.cerrar_conexion(conexion)
 
     def obtener_por_id(self, id_dispositivo: int):
-        """Busca y devuelve un dispositivo por su ID (sin usar dictionary=True)"""
         conexion = None
         cursor = None
         try:
@@ -52,12 +49,12 @@ class DispositivoDAO(IDispositivoDAO):
             if conexion:
                 cursor = conexion.cursor()
                 sql = """
-                    SELECT id, nombre_dispositivo, tipo_dispositivo, estado_dispositivo
+                    SELECT id_dispositivo, nombre_dispositivo, tipo_dispositivo, estado_dispositivo
                     FROM dispositivos
-                    WHERE id = %s
+                    WHERE id_dispositivo = %s
                 """
                 cursor.execute(sql, (id_dispositivo,))
-                fila = cursor.fetchall()  # una sola fila
+                fila = cursor.fetchone()
 
                 if fila:
                     dispositivo = Dispositivo(
@@ -82,7 +79,6 @@ class DispositivoDAO(IDispositivoDAO):
                 ConexionDB.cerrar_conexion(conexion)
 
     def actualizar_dispositivo(self, dispositivo):
-        """Actualiza los datos de un dispositivo existente"""
         conexion = None
         cursor = None
         try:
@@ -92,7 +88,7 @@ class DispositivoDAO(IDispositivoDAO):
                 sql = """
                     UPDATE dispositivos
                     SET nombre_dispositivo = %s, tipo_dispositivo = %s, estado_dispositivo = %s
-                    WHERE id = %s
+                    WHERE id_dispositivo = %s
                 """
                 valores = (
                     dispositivo.get_nombre_dispositivo(),
@@ -123,14 +119,13 @@ class DispositivoDAO(IDispositivoDAO):
                 ConexionDB.cerrar_conexion(conexion)
 
     def eliminar_dispositivo(self, id_dispositivo: int):
-        """Elimina un dispositivo de la base de datos"""
         conexion = None
         cursor = None
         try:
             conexion = ConexionDB.get_conexion()
             if conexion:
                 cursor = conexion.cursor()
-                sql = "DELETE FROM dispositivos WHERE id = %s"
+                sql = "DELETE FROM dispositivos WHERE id_dispositivo = %s"
                 cursor.execute(sql, (id_dispositivo,))
                 conexion.commit()
 
@@ -154,14 +149,13 @@ class DispositivoDAO(IDispositivoDAO):
                 ConexionDB.cerrar_conexion(conexion)
 
     def cambiar_estado(self, id_dispositivo: int, nuevo_estado: bool):
-        """Cambia el estado de un dispositivo (encendido/apagado)"""
         conexion = None
         cursor = None
         try:
             conexion = ConexionDB.get_conexion()
             if conexion:
                 cursor = conexion.cursor()
-                sql = "UPDATE dispositivos SET estado_dispositivo = %s WHERE id = %s"
+                sql = "UPDATE dispositivos SET estado_dispositivo = %s WHERE id_dispositivo = %s"
                 cursor.execute(sql, (nuevo_estado, id_dispositivo))
                 conexion.commit()
 
@@ -188,12 +182,12 @@ class DispositivoDAO(IDispositivoDAO):
     def listar_dispositivos(self):
         conexion = None
         cursor = None
-        dispositivos = []   
+        dispositivos = []
         try:
             conexion = ConexionDB.get_conexion()
             if conexion:
                 cursor = conexion.cursor()
-                sql = "SELECT id, nombre_dispositivo, tipo_dispositivo, estado_dispositivo FROM dispositivos"
+                sql = "SELECT id_dispositivo, nombre_dispositivo, tipo_dispositivo, estado_dispositivo FROM dispositivos"
                 cursor.execute(sql)
                 filas = cursor.fetchall()
 
@@ -229,7 +223,7 @@ class DispositivoDAO(IDispositivoDAO):
                 sql = """
                     UPDATE dispositivos
                     SET nombre_dispositivo = %s, tipo_dispositivo = %s, estado_dispositivo = %s
-                    WHERE id = %s
+                    WHERE id_dispositivo = %s
                 """
                 valores = (
                     dispositivo.get_nombre_dispositivo(),
