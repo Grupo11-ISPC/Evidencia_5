@@ -41,6 +41,7 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor.close()
                 ConexionDB.cerrar_conexion(conexion)
+
     def obtener_por_id(self, id):
         """Busca y devuelve un usuario por su ID"""
         conexion = None
@@ -49,10 +50,10 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor = conexion.cursor()
                 
-                sql = "SELECT id, nombre, email, password, rol FROM usuarios WHERE id = %s"
+                sql = "SELECT id_usuario, nombre, email, password, rol FROM usuarios WHERE id_usuario = %s"
                 cursor.execute(sql, (id,))
                 
-                fila = cursor.fetchall()
+                fila = cursor.fetchone() 
                 
                 if fila:
                     # Crear objeto Usuario con los datos de la BD
@@ -67,7 +68,7 @@ class UsuarioDAO(IUsuarioDAO):
                 else:
                     print(f"No se encontró usuario con ID: {id}")
                     return None
-                    
+                        
         except Exception as e:
             print(f"Error al obtener usuario: {e}")
             return None
@@ -76,8 +77,10 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor.close()
                 ConexionDB.cerrar_conexion(conexion)
+
     def obtener_por_email(self, email):
         raise NotImplementedError
+
     def eliminar(self, id):
         """Elimina un usuario de la base de datos"""
         conexion = None
@@ -86,7 +89,7 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor = conexion.cursor()
                 
-                sql = "DELETE FROM usuarios WHERE id = %s"
+                sql = "DELETE FROM usuarios WHERE id_usuario = %s"
                 cursor.execute(sql, (id,))
                 conexion.commit()
                 
@@ -96,7 +99,7 @@ class UsuarioDAO(IUsuarioDAO):
                 else:
                     print(f"No se encontró usuario con ID: {id}")
                     return False
-                    
+                        
         except Exception as e:
             print(f"Error al eliminar usuario: {e}")
             if conexion:
@@ -107,6 +110,7 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor.close()
                 ConexionDB.cerrar_conexion(conexion)
+
     def listar_usuarios(self):
         conexion = None
         usuarios = []
@@ -115,7 +119,7 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor = conexion.cursor()
                 
-                sql = "SELECT id, nombre, email, password, rol FROM usuarios"
+                sql = "SELECT id_usuario, nombre, email, password, rol FROM usuarios"
                 cursor.execute(sql)
                 
                 filas = cursor.fetchall()
@@ -130,7 +134,7 @@ class UsuarioDAO(IUsuarioDAO):
                     )
                     usuarios.append(usuario)
                 return usuarios
-                    
+                        
         except Exception as e:
             print(f"Error al listar usuarios: {e}")
             return []
@@ -139,6 +143,7 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor.close()
                 ConexionDB.cerrar_conexion(conexion)
+
     def modificar_usuario(self, usuario: Usuario):
         conexion = None
         cursor = None
@@ -149,7 +154,7 @@ class UsuarioDAO(IUsuarioDAO):
                 sql = """
                     UPDATE usuarios 
                     SET nombre = %s, email = %s, password = %s, rol = %s
-                    WHERE id = %s
+                    WHERE id_usuario = %s 
                 """
                 valores = (
                     usuario.get_nombre(),
@@ -178,7 +183,9 @@ class UsuarioDAO(IUsuarioDAO):
                 cursor.close()
             if conexion:
                 ConexionDB.cerrar_conexion(conexion)
+                
     def obtener_usuario_por_id(self, usuario_id: int) -> Optional[Usuario]:
         raise NotImplementedError   
+    
     def eliminar_usuario(self, usuario_id: int):
         raise NotImplementedError
