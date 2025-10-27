@@ -7,7 +7,7 @@ class ConexionDB:
     _PORT = 3306
     _DATABASE = 'smart_home_solutions'
     _USER = 'root'
-    _PASSWORD = 'admin'
+    _PASSWORD = ''
     
     @staticmethod
     def get_conexion():
@@ -53,7 +53,7 @@ class ConexionDB:
             # Tabla usuarios
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS usuarios (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
                     nombre VARCHAR(100) NOT NULL,
                     email VARCHAR(100) UNIQUE NOT NULL,
                     password VARCHAR(255) NOT NULL,
@@ -65,7 +65,7 @@ class ConexionDB:
             # Tabla dispositivos
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS dispositivos (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id_dispositivo INT AUTO_INCREMENT PRIMARY KEY,
                     nombre_dispositivo VARCHAR(100) NOT NULL,
                     tipo_dispositivo VARCHAR(50) NOT NULL,
                     estado_dispositivo BOOLEAN DEFAULT FALSE,
@@ -109,7 +109,3 @@ class ConexionDB:
             if conexion and conexion.is_connected():
                 cursor.close()
                 conexion.close()
-
-
-if __name__ == "__main__":
-    ConexionDB.inicializar_bd()

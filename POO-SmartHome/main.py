@@ -3,6 +3,7 @@ from dominio.dispositivo import Dispositivo
 from dao.usuario_dao import UsuarioDAO
 from dao.dispositivo_dao import DispositivoDAO
 import os
+from conn.db_conn import ConexionDB
 
 # Variables globales
 usuario_actual = None
@@ -304,4 +305,5 @@ def pausar():
 
 ###################################################################################
 if __name__ == "__main__":
+    ConexionDB.inicializar_bd()
     main()
