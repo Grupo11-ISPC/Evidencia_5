@@ -1,3 +1,4 @@
+USE smart_home_solutions;
 INSERT INTO usuarios (nombre, email, password, rol) VALUES
 ('Ana', 'ana.garcia@email.com', '$2y$10$abcdefghijk', 'admin'),
 ('Luis', 'luis.perez@email.com', '$2y$10$lmnopqrstuv', 'user'),
@@ -38,7 +39,7 @@ INSERT INTO automatizaciones (descripcion, condicion, id_usuario) VALUES
 ('Activar camara interior si no hay movimiento por 10 min', 'sensor_movimiento = 0 AND tiempo > 10', 7),
 ('Notificar movimiento detectado en sala', 'sensor_movimiento = 1', 6);
 
-INSERT INTO acciones (tipo_accion, valor_configurado, id_automatizacion, id_dispositivo) VALUES
+INSERT INTO acciones (tipo, valor_configurado, id_automatizacion, id_dispositivo) VALUES
 ('encender', 'Luz Sala', 1, 1),
 ('cambiar_estado', 'Termostato', 1, 2),
 ('apagar', 'Enchufe Cocina', 2, 3),
