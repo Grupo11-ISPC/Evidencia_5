@@ -5,7 +5,7 @@ CREATE TABLE usuarios(
     nombre VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
-    rol ENUM('admin', 'usuario') DEFAULT 'usuario'
+    rol ENUM('admin', 'user') DEFAULT 'user'
 );
 
 CREATE TABLE dispositivos(
@@ -26,8 +26,8 @@ CREATE TABLE automatizaciones (
 );
 
 CREATE TABLE acciones (
-    id_accion INT PRIMARY KEY AUTO_INCREMENT,
-    tipo_accion VARCHAR(50),
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipo VARCHAR(50),
     valor_configurado VARCHAR(255),
     id_automatizacion INT,
     id_dispositivo INT,

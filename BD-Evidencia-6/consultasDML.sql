@@ -1,12 +1,12 @@
 INSERT INTO usuarios (nombre, email, password, rol) VALUES
 ('Ana', 'ana.garcia@email.com', '$2y$10$abcdefghijk', 'admin'),
-('Luis', 'luis.perez@email.com', '$2y$10$lmnopqrstuv', 'usuario'),
-('Maria', 'maria.lopez@email.com', '$2y$10$wxyzabcdefg', 'usuario'),
-('Carlos', 'carlos.sanchez@email.com', '$2y$10$hijklmnopqr', 'usuario'),
-('Sofia', 'sofia.martinez@email.com', '$2y$10$stuvwxyzabc', 'usuario'),
-('Federico', 'federico@email.com', '$2y$10$defghijklmn', 'usuario'),
-('Andres', 'andres@email.com', '$2y$10$opqrstuvwxy', 'usuario'),
-('Gabriel', 'gabriel@email.com', '$2y$10$zabcdefghij', 'usuario');
+('Luis', 'luis.perez@email.com', '$2y$10$lmnopqrstuv', 'user'),
+('Maria', 'maria.lopez@email.com', '$2y$10$wxyzabcdefg', 'user'),
+('Carlos', 'carlos.sanchez@email.com', '$2y$10$hijklmnopqr', 'user'),
+('Sofia', 'sofia.martinez@email.com', '$2y$10$stuvwxyzabc', 'user'),
+('Federico', 'federico@email.com', '$2y$10$defghijklmn', 'user'),
+('Andres', 'andres@email.com', '$2y$10$opqrstuvwxy', 'user'),
+('Gabriel', 'gabriel@email.com', '$2y$10$zabcdefghij', 'user');
 
 INSERT INTO dispositivos (nombre, tipo, estado, id_usuario) VALUES
 ('luz Sala', 'Iluminacion', 1, 1),
