@@ -7,7 +7,7 @@ class ConexionDB:
     _PORT = 3306
     _DATABASE = 'smart_home_solutions'
     _USER = 'root'
-    _PASSWORD = 'admin'
+    _PASSWORD = ''
     
     @staticmethod
     def get_conexion():
@@ -53,7 +53,7 @@ class ConexionDB:
             # Tabla usuarios
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS usuarios (
-                    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+                    id INT PRIMARY KEY AUTO_INCREMENT,
                     nombre VARCHAR(100),
                     email VARCHAR(100) UNIQUE,
                     password VARCHAR(255),
@@ -64,36 +64,36 @@ class ConexionDB:
             # Tabla dispositivos
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS dispositivos (
-                    id_dispositivo INT PRIMARY KEY AUTO_INCREMENT,
-                    nombre_dispositivo VARCHAR(100),
-                    tipo_dispositivo VARCHAR(50),
-                    estado_dispositivo TINYINT DEFAULT 0,
+                    id INT PRIMARY KEY AUTO_INCREMENT,
+                    nombre VARCHAR(100),
+                    tipo VARCHAR(50),
+                    estado TINYINT DEFAULT 0,
                     id_usuario INT,
-                    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+                    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
                 )
             """)
             
             # Tabla automatizaciones
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS automatizaciones (
-                    id_automatizacion INT PRIMARY KEY AUTO_INCREMENT,
+                    id INT PRIMARY KEY AUTO_INCREMENT,
                     descripcion VARCHAR(255),
                     condicion VARCHAR(255),
                     id_usuario INT,
-                    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+                    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
                 )
             """)
             
             # Tabla acciones
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS acciones (
-                    id_accion INT PRIMARY KEY AUTO_INCREMENT,
-                    tipo_accion VARCHAR(50),
+                    id INT PRIMARY KEY AUTO_INCREMENT,
+                    tipo VARCHAR(50),
                     valor_configurado VARCHAR(255),
                     id_automatizacion INT,
                     id_dispositivo INT,
-                    FOREIGN KEY (id_automatizacion) REFERENCES automatizaciones(id_automatizacion) ON DELETE CASCADE,
-                    FOREIGN KEY (id_dispositivo) REFERENCES dispositivos(id_dispositivo) ON DELETE CASCADE
+                    FOREIGN KEY (id_automatizacion) REFERENCES automatizaciones(id) ON DELETE CASCADE,
+                    FOREIGN KEY (id_dispositivo) REFERENCES dispositivos(id) ON DELETE CASCADE
                 )
             """)
             

@@ -1,37 +1,37 @@
 class Usuario:
     def __init__(self, nombre, email, password, rol, id=None):
-        self._id = id
-        self._nombre = nombre
-        self._email = email
-        self._password = password
-        self._rol = rol
+        self.__id = id
+        self.__nombre = nombre
+        self.__email = email
+        self.__password = password
+        self.__rol = rol
 
     def get_id(self):
-        return self._id
+        return self.__id
         
     def get_nombre(self):
-        return self._nombre
+        return self.__nombre
     
     def get_email(self):
-        return self._email
+        return self.__email
     
     def set_nombre(self, nombre):
-        self._nombre = nombre
+        self.__nombre = nombre
 
     def set_email(self, email):
-        self._email = email
+        self.__email = email
 
     def set_password(self, password):
-        self._password = password
+        self.__password = password
 
     def get_password(self):
-        return self._password
+        return self.__password
     
     def get_rol(self):
-        return self._rol
+        return self.__rol
     
     def set_rol(self, rol):
-        self._rol = rol
+        self.__rol = rol
 
     @staticmethod #para que no necesite self, osea, para que se valide sin instanciar la clase(crear el objeto)
     def validar_usuario(nombre, email, password, rol):

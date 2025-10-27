@@ -18,7 +18,7 @@ class UsuarioDAO(IUsuarioDAO):
                 valores = (
                     usuario.get_nombre(),
                     usuario.get_email(),
-                    usuario._password,
+                    usuario.get_password(),
                     usuario.get_rol()
                 )
                 
@@ -50,7 +50,7 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor = conexion.cursor()
                 
-                sql = "SELECT id_usuario, nombre, email, password, rol FROM usuarios WHERE id_usuario = %s"
+                sql = "SELECT id, nombre, email, password, rol FROM usuarios WHERE id = %s"
                 cursor.execute(sql, (id,))
                 
                 fila = cursor.fetchone() 
@@ -89,7 +89,7 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor = conexion.cursor()
                 
-                sql = "DELETE FROM usuarios WHERE id_usuario = %s"
+                sql = "DELETE FROM usuarios WHERE id = %s"
                 cursor.execute(sql, (id,))
                 conexion.commit()
                 
@@ -119,7 +119,7 @@ class UsuarioDAO(IUsuarioDAO):
             if conexion:
                 cursor = conexion.cursor()
                 
-                sql = "SELECT id_usuario, nombre, email, password, rol FROM usuarios"
+                sql = "SELECT id, nombre, email, password, rol FROM usuarios"
                 cursor.execute(sql)
                 
                 filas = cursor.fetchall()
@@ -154,7 +154,7 @@ class UsuarioDAO(IUsuarioDAO):
                 sql = """
                     UPDATE usuarios 
                     SET nombre = %s, email = %s, password = %s, rol = %s
-                    WHERE id_usuario = %s 
+                    WHERE id = %s 
                 """
                 valores = (
                     usuario.get_nombre(),

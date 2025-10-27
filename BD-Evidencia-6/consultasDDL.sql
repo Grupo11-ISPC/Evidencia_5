@@ -1,8 +1,7 @@
-CREATE DATABASE smart_home_solutions;
-USE smart_home_solutions;
+
 
 CREATE TABLE usuarios(
-    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
@@ -10,20 +9,20 @@ CREATE TABLE usuarios(
 );
 
 CREATE TABLE dispositivos(
-    id_dispositivo INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_dispositivo VARCHAR(100),
-    tipo_dispositivo VARCHAR(50),
-    estado_dispositivo TINYINT DEFAULT 0,
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100),
+    tipo VARCHAR(50),
+    estado TINYINT DEFAULT 0,
     id_usuario INT,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE automatizaciones (
-    id_automatizacion INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     descripcion VARCHAR(255),
     condicion VARCHAR(255),
     id_usuario INT,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE acciones (
@@ -32,6 +31,6 @@ CREATE TABLE acciones (
     valor_configurado VARCHAR(255),
     id_automatizacion INT,
     id_dispositivo INT,
-    FOREIGN KEY (id_automatizacion) REFERENCES automatizaciones(id_automatizacion) ON DELETE CASCADE,
-    FOREIGN KEY (id_dispositivo) REFERENCES dispositivos(id_dispositivo) ON DELETE CASCADE
+    FOREIGN KEY (id_automatizacion) REFERENCES automatizaciones(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_dispositivo) REFERENCES dispositivos(id) ON DELETE CASCADE
 );

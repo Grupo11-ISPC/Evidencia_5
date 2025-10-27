@@ -13,20 +13,20 @@ class DispositivoDAO(IDispositivoDAO):
             if conexion:
                 cursor = conexion.cursor()
                 sql = """
-                    INSERT INTO dispositivos (nombre_dispositivo, tipo_dispositivo, estado_dispositivo, id_usuario)
+                    INSERT INTO dispositivos (nombre, tipo, estado, id_usuario)
                     VALUES (%s, %s, %s, %s)
                 """
                 valores = (
-                    dispositivo.get_nombre_dispositivo(),
-                    dispositivo.get_tipo_dispositivo(),
-                    dispositivo.get_estado_dispositivo(),
+                    dispositivo.get_nombre(),
+                    dispositivo.get_tipo(),
+                    dispositivo.get_estado(),
                     id_usuario
                 )
                 cursor.execute(sql, valores)
                 conexion.commit()
 
-                dispositivo._id = cursor.lastrowid
-                print(f"Dispositivo '{dispositivo.get_nombre_dispositivo()}' creado con ID: {dispositivo._id}")
+                dispositivo.__id = cursor.lastrowid
+                print(f"Dispositivo '{dispositivo.get_nombre()}' creado con ID: {dispositivo.__id}")
                 return True
 
         except Exception as e:
@@ -41,7 +41,7 @@ class DispositivoDAO(IDispositivoDAO):
             if conexion:
                 ConexionDB.cerrar_conexion(conexion)
 
-    def obtener_por_id(self, id_dispositivo: int):
+    def obtener_por_id(self, id: int):
         conexion = None
         cursor = None
         try:
@@ -49,23 +49,23 @@ class DispositivoDAO(IDispositivoDAO):
             if conexion:
                 cursor = conexion.cursor()
                 sql = """
-                    SELECT id_dispositivo, nombre_dispositivo, tipo_dispositivo, estado_dispositivo
+                    SELECT id, nombre, tipo, estado
                     FROM dispositivos
-                    WHERE id_dispositivo = %s
+                    WHERE id = %s
                 """
-                cursor.execute(sql, (id_dispositivo,))
+                cursor.execute(sql, (id,))
                 fila = cursor.fetchone()
 
                 if fila:
                     dispositivo = Dispositivo(
-                        nombre_dispositivo=fila[1], # type: ignore
-                        tipo_dispositivo=fila[2], # type: ignore
-                        estado_dispositivo=bool(fila[3]), # type: ignore
-                        id=fila[0] # type: ignore
+                        nombre=fila[1],#type: ignore
+                        tipo=fila[2],#type: ignore
+                        estado=bool(fila[3]),#type: ignore
+                        id=fila[0] #type: ignore
                     )
                     return dispositivo
                 else:
-                    print(f"No se encontró dispositivo con ID: {id_dispositivo}")
+                    print(f"No se encontró dispositivo con ID: {id}")
                     return None
 
         except Exception as e:
@@ -87,13 +87,13 @@ class DispositivoDAO(IDispositivoDAO):
                 cursor = conexion.cursor()
                 sql = """
                     UPDATE dispositivos
-                    SET nombre_dispositivo = %s, tipo_dispositivo = %s, estado_dispositivo = %s
-                    WHERE id_dispositivo = %s
+                    SET nombre = %s, tipo = %s, estado = %s
+                    WHERE id = %s
                 """
                 valores = (
-                    dispositivo.get_nombre_dispositivo(),
-                    dispositivo.get_tipo_dispositivo(),
-                    dispositivo.get_estado_dispositivo(),
+                    dispositivo.get_nombre(),
+                    dispositivo.get_tipo(),
+                    dispositivo.get_estado(),
                     dispositivo.get_id()
                 )
                 cursor.execute(sql, valores)
@@ -118,22 +118,22 @@ class DispositivoDAO(IDispositivoDAO):
             if conexion:
                 ConexionDB.cerrar_conexion(conexion)
 
-    def eliminar_dispositivo(self, id_dispositivo: int):
+    def eliminar_dispositivo(self, id: int):
         conexion = None
         cursor = None
         try:
             conexion = ConexionDB.get_conexion()
             if conexion:
                 cursor = conexion.cursor()
-                sql = "DELETE FROM dispositivos WHERE id_dispositivo = %s"
-                cursor.execute(sql, (id_dispositivo,))
+                sql = "DELETE FROM dispositivos WHERE id = %s"
+                cursor.execute(sql, (id,))
                 conexion.commit()
 
                 if cursor.rowcount > 0:
-                    print(f"Dispositivo ID {id_dispositivo} eliminado")
+                    print(f"Dispositivo ID {id} eliminado")
                     return True
                 else:
-                    print(f"No se encontró dispositivo con ID: {id_dispositivo}")
+                    print(f"No se encontró dispositivo con ID: {id}")
                     return False
 
         except Exception as e:
@@ -148,23 +148,23 @@ class DispositivoDAO(IDispositivoDAO):
             if conexion:
                 ConexionDB.cerrar_conexion(conexion)
 
-    def cambiar_estado(self, id_dispositivo: int, nuevo_estado: bool):
+    def cambiar_estado(self, id: int, nuevo_estado: bool):
         conexion = None
         cursor = None
         try:
             conexion = ConexionDB.get_conexion()
             if conexion:
                 cursor = conexion.cursor()
-                sql = "UPDATE dispositivos SET estado_dispositivo = %s WHERE id_dispositivo = %s"
-                cursor.execute(sql, (nuevo_estado, id_dispositivo))
+                sql = "UPDATE dispositivos SET estado = %s WHERE id = %s"
+                cursor.execute(sql, (nuevo_estado, id))
                 conexion.commit()
 
                 if cursor.rowcount > 0:
                     estado_texto = "encendido" if nuevo_estado else "apagado"
-                    print(f"✅ Dispositivo ID {id_dispositivo} {estado_texto}")
+                    print(f"✅ Dispositivo ID {id} {estado_texto}")
                     return True
                 else:
-                    print(f"⚠️ No se encontró dispositivo con ID: {id_dispositivo}")
+                    print(f"⚠️ No se encontró dispositivo con ID: {id}")
                     return False
 
         except Exception as e:
@@ -187,16 +187,16 @@ class DispositivoDAO(IDispositivoDAO):
             conexion = ConexionDB.get_conexion()
             if conexion:
                 cursor = conexion.cursor()
-                sql = "SELECT id_dispositivo, nombre_dispositivo, tipo_dispositivo, estado_dispositivo FROM dispositivos"
+                sql = "SELECT id, nombre, tipo, estado FROM dispositivos"
                 cursor.execute(sql)
                 filas = cursor.fetchall()
 
                 for fila in filas:
                     dispositivos.append(
                         Dispositivo(
-                            nombre_dispositivo=fila[1], # type: ignore
-                            tipo_dispositivo=fila[2], # type: ignore
-                            estado_dispositivo=bool(fila[3]), # type: ignore
+                            nombre=fila[1], # type: ignore
+                            tipo=fila[2], # type: ignore
+                            estado=bool(fila[3]), # type: ignore
                             id=fila[0] # type: ignore
                         )
                     )
@@ -222,13 +222,13 @@ class DispositivoDAO(IDispositivoDAO):
                 cursor = conexion.cursor()
                 sql = """
                     UPDATE dispositivos
-                    SET nombre_dispositivo = %s, tipo_dispositivo = %s, estado_dispositivo = %s
-                    WHERE id_dispositivo = %s
+                    SET nombre = %s, tipo = %s, estado = %s
+                    WHERE id = %s
                 """
                 valores = (
-                    dispositivo.get_nombre_dispositivo(),
-                    dispositivo.get_tipo_dispositivo(),
-                    dispositivo.get_estado_dispositivo(),
+                    dispositivo.get_nombre(),
+                    dispositivo.get_tipo(),
+                    dispositivo.get_estado(),
                     dispositivo.get_id()
                 )
                 cursor.execute(sql, valores)
@@ -254,5 +254,5 @@ class DispositivoDAO(IDispositivoDAO):
     def listar_dispositivo(self):
         raise NotImplementedError
 
-    def get_nombre_dispositivo(self, id_dispositivo: int):
+    def get_nombre_dispositivo(self, id: int):
         raise NotImplementedError

@@ -8,7 +8,7 @@ INSERT INTO usuarios (nombre, email, password, rol) VALUES
 ('Andres', 'andres@email.com', '$2y$10$opqrstuvwxy', 'usuario'),
 ('Gabriel', 'gabriel@email.com', '$2y$10$zabcdefghij', 'usuario');
 
-INSERT INTO dispositivos (nombre_dispositivo, tipo_dispositivo, estado_dispositivo, id_usuario) VALUES
+INSERT INTO dispositivos (nombre, tipo, estado, id_usuario) VALUES
 ('luz Sala', 'Iluminacion', 1, 1),
 ('Termostato', 'Climatizacion', 0, 1),
 ('Enchufe Cocina', 'Energia', 1, 2),
@@ -63,45 +63,45 @@ SELECT * FROM acciones;
 -- CONSULTAS MULTITABLA--   
 
 /*esta consulta trae el nombre del dispositivo y el tipo, de los usuarios */
-SELECT u.nombre AS usuario, d.nombre_dispositivo, d.tipo_dispositivo
+SELECT u.nombre AS usuario, d.nombre, d.tipo
 FROM dispositivos d
-INNER JOIN usuarios u ON d.id_usuario = u.id_usuario;
+INNER JOIN usuarios u ON d.id_usuario = u.id;
 
 /* esta consulta trae la descripcion y la condicion de las automatizaciones que tiene cada usuario*/
 SELECT u.nombre AS usuario, a.descripcion, a.condicion
 FROM automatizaciones a
-INNER JOIN usuarios u ON a.id_usuario = u.id_usuario;
+INNER JOIN usuarios u ON a.id_usuario = u.id;
 
 /* esta consulta nos trae las acciones y los dispostivos que participan en la automatizacion*/
-SELECT a.descripcion AS automatizacion, ac.tipo_accion, d.nombre_dispositivo
+SELECT a.descripcion AS automatizacion, ac.tipo_accion, d.nombre
 FROM acciones ac
-INNER JOIN automatizaciones a ON ac.id_automatizacion = a.id_automatizacion
-INNER JOIN dispositivos d ON ac.id_dispositivo = d.id_dispositivo;
+INNER JOIN automatizaciones a ON ac.id_automatizacion = a.id
+INNER JOIN dispositivos d ON ac.id_dispositivo = d.id;
 
 /* esta consulta trae los usuarios con los nombres de dispositivos y automatizaciones que tengan asociados.*/
-SELECT u.nombre AS usuario, d.nombre_dispositivo, a.descripcion AS automatizacion
+SELECT u.nombre AS usuario, d.nombre, a.descripcion AS automatizacion
 FROM usuarios u
-LEFT JOIN dispositivos d ON u.id_usuario = d.id_usuario
-LEFT JOIN automatizaciones a ON u.id_usuario = a.id_usuario
-ORDER BY u.id_usuario;
+LEFT JOIN dispositivos d ON u.id = d.id_usuario
+LEFT JOIN automatizaciones a ON u.id = a.id_usuario
+ORDER BY u.id;
 
 -- SUBCONSULTAS--
 
 /* esta subconsulta muestra los nombres de los usuarios que tienen al menos un dispositivo de tipo seguridad.*/
 SELECT 
     u.nombre AS usuario, 
-    d.nombre_dispositivo
+    d.nombre
 FROM usuarios u
-INNER JOIN dispositivos d ON u.id_usuario = d.id_usuario
-WHERE d.tipo_dispositivo = 'Seguridad';
+INNER JOIN dispositivos d ON u.id = d.id_usuario
+WHERE d.tipo = 'Seguridad';
 
 /* esta subconsulta nos trae la descripcion de las automatizaciones que actualmente estan encendidas*/
-SELECT descripcion FROM automatizaciones WHERE id_automatizacion IN (
+SELECT descripcion FROM automatizaciones WHERE id IN (
     SELECT id_automatizacion
     FROM acciones
     WHERE id_dispositivo IN (
-        SELECT id_dispositivo
+        SELECT id
         FROM dispositivos
-        WHERE estado_dispositivo = 1
+        WHERE estado = 1
     )
 );

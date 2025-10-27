@@ -19,9 +19,9 @@ class IDispositivoDAO(ABC):
         pass
 
     @abstractmethod
-    def eliminar_dispositivo(self, id_dispositivo: int):
+    def eliminar_dispositivo(self, id: int):
         pass
 
     @abstractmethod
-    def get_nombre_dispositivo(self, id_dispositivo: int):
+    def get_nombre_dispositivo(self, id: int):
         pass

@@ -119,7 +119,7 @@ def menu_usuario():
                 print("No hay dispositivos.")
             else:
                 for i, d in enumerate(dispositivos, 1):
-                    print(f"{i}. {d.get_nombre_dispositivo()} ({d.get_tipo_dispositivo()}) - Estado: {'Encendido' if d.get_estado_dispositivo() else 'Apagado'}")
+                    print(f"{i}. {d.get_nombre()} ({d.get_tipo()}) - Estado: {'Encendido' if d.get_estado() else 'Apagado'}")
             pausar()
         elif opcion == "0":
             break
@@ -174,7 +174,7 @@ def gestionar_dispositivos():
                 print("No hay dispositivos.")
             else:
                 for i, d in enumerate(dispositivos, 1):
-                    print(f"{i}. {d.get_nombre_dispositivo()} ({d.get_tipo_dispositivo()}) - Estado: {'Encendido' if d.get_estado_dispositivo() else 'Apagado'}")
+                    print(f"{i}. {d.get_nombre()} ({d.get_tipo()}) - Estado: {'Encendido' if d.get_estado() else 'Apagado'}")
             pausar()
 
         elif opcion == "3":
@@ -186,16 +186,16 @@ def gestionar_dispositivos():
                 continue
 
             for i, d in enumerate(dispositivos, 1):
-                print(f"{i}. {d.get_nombre_dispositivo()} ({d.get_tipo_dispositivo()})")
+                print(f"{i}. {d.get_nombre()} ({d.get_tipo()})")
 
             try:
                 idx = int(input("Número de dispositivo a modificar: ")) - 1
                 if 0 <= idx < len(dispositivos):
                     d = dispositivos[idx]
-                    nuevo_nombre = input("Nuevo nombre (enter para mantener): ").strip() or d.get_nombre_dispositivo()
-                    nuevo_tipo = input("Nuevo tipo (enter para mantener): ").strip() or d.get_tipo_dispositivo()
+                    nuevo_nombre = input("Nuevo nombre (enter para mantener): ").strip() or d.get_nombre()
+                    nuevo_tipo = input("Nuevo tipo (enter para mantener): ").strip() or d.get_tipo()
 
-                    disp = Dispositivo(nuevo_nombre, nuevo_tipo, d.get_estado_dispositivo(), id=d.get_id())
+                    disp = Dispositivo(nuevo_nombre, nuevo_tipo, d.get_estado(), id=d.get_id())
                     dispositivo_dao.modificar_dispositivo(disp)
                     print("✅ Dispositivo modificado")
                 else:
@@ -213,7 +213,7 @@ def gestionar_dispositivos():
                 continue
 
             for i, d in enumerate(dispositivos, 1):
-                print(f"{i}. {d.get_nombre_dispositivo()} ({d.get_tipo_dispositivo()})")
+                print(f"{i}. {d.get_nombre()} ({d.get_tipo()})")
 
             try:
                 idx = int(input("Número de dispositivo a eliminar: ")) - 1
