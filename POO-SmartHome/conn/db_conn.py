@@ -7,7 +7,7 @@ class ConexionDB:
     _PORT = 3306
     _DATABASE = 'smart_home_solutions'
     _USER = 'root'
-    _PASSWORD = ''
+    _PASSWORD = 'admin'
     
     @staticmethod
     def get_conexion():
