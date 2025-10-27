@@ -26,9 +26,9 @@ class UsuarioDAO(IUsuarioDAO):
                 conexion.commit()
                 
                 # Obtener el ID generado
-                usuario._id = cursor.lastrowid
+                usuario.__id = cursor.lastrowid
                 
-                print(f"Usuario '{usuario.get_nombre()}' creado con ID: {usuario._id}")
+                print(f"Usuario '{usuario.get_nombre()}' creado con ID: {usuario.__id}")
                 return True
                 
         except Exception as e:
@@ -159,7 +159,7 @@ class UsuarioDAO(IUsuarioDAO):
                 valores = (
                     usuario.get_nombre(),
                     usuario.get_email(),
-                    usuario._password,
+                    usuario.__password,
                     usuario.get_rol(),
                     usuario.get_id()
                 )
