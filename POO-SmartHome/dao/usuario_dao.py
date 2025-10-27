@@ -159,7 +159,7 @@ class UsuarioDAO(IUsuarioDAO):
                 valores = (
                     usuario.get_nombre(),
                     usuario.get_email(),
-                    usuario.__password,
+                    usuario.get_password(),
                     usuario.get_rol(),
                     usuario.get_id()
                 )
