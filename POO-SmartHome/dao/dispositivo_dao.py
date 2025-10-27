@@ -58,10 +58,10 @@ class DispositivoDAO(IDispositivoDAO):
 
                 if fila:
                     dispositivo = Dispositivo(
-                        nombre_dispositivo=fila[1],
-                        tipo_dispositivo=fila[2],
-                        estado_dispositivo=bool(fila[3]),
-                        id=fila[0]
+                        nombre_dispositivo=fila[1], # type: ignore
+                        tipo_dispositivo=fila[2], # type: ignore
+                        estado_dispositivo=bool(fila[3]), # type: ignore
+                        id=fila[0] # type: ignore
                     )
                     return dispositivo
                 else:

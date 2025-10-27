@@ -58,11 +58,11 @@ class UsuarioDAO(IUsuarioDAO):
                 if fila:
                     # Crear objeto Usuario con los datos de la BD
                     usuario = Usuario(
-                        nombre=fila[1],
-                        email=fila[2],
-                        password=fila[3],
-                        rol=fila[4],
-                        id=fila[0]
+                        nombre=fila[1], # type: ignore
+                        email=fila[2], # type: ignore
+                        password=fila[3], # type: ignore
+                        rol=fila[4], # type: ignore
+                        id=fila[0] # type: ignore
                     )
                     return usuario
                 else:
